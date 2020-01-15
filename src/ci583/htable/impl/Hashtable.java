@@ -16,6 +16,7 @@ import java.util.List;
 
 public class Hashtable<V> {
 
+	private static final int DOUBLE_HASH_MAX = 8; //used in the doubleHash method
 	private Object[] arr; //an array of Pair objects, where each pair contains the key and value stored in the hashtable
 	private int max; //the size of arr. This should be a prime number
 	private int itemCount; //the number of items stored in arr
@@ -63,8 +64,7 @@ public class Hashtable<V> {
 	    if(getLoadFactor()>maxLoad) {
 	        resize();
         }
-        arr[findEmpty(hash(key), 0, key)] = p;
-	    System.out.println("itemCount: "+itemCount);
+        arr[findEmpty(hash(key), key, 0)] = p;
 	}
 
 	/**
@@ -137,7 +137,7 @@ public class Hashtable<V> {
         } else if (((Pair) arr[startPos]).key.equals(key)) {
 		    return ((Pair) arr[startPos]).value;
         } else {
-		    return find(getNextLocation(startPos, stepNum+1, key), key, stepNum+1);
+		    return find(getNextLocation(startPos, key, stepNum+1), key, stepNum+1);
         }
 	}
 
@@ -147,16 +147,15 @@ public class Hashtable<V> {
 	 * method with an incremented value of stepNum to find the appropriate next position to check 
 	 * (which will differ depending on the probe type being used) and use this in a recursive call to findEmpty.
 	 * @param startPos
-	 * @param stepNum
 	 * @param key
+	 * @param stepNum
 	 * @return
 	 */
-	private int findEmpty(int startPos, int stepNum, String key) {
-	    System.out.println("Storing "+key);
+	private int findEmpty(int startPos, String key, int stepNum) {
         if(arr[startPos] == null || ((Pair) arr[startPos]).key.equals(key)) {
             return startPos;
         } else {
-            return findEmpty(getNextLocation(startPos, stepNum+1, key), stepNum+1 , key);
+            return findEmpty(getNextLocation(startPos, key, stepNum+1), key, stepNum+1);
         }
 	}
 
@@ -166,11 +165,11 @@ public class Hashtable<V> {
 	 * add the double hashed value of the key to startPos. If the quadratic probe is being used, add
 	 * the square of the step number to startPos.
 	 * @param startPos
-	 * @param stepNum
 	 * @param key
+	 * @param stepNum
 	 * @return
 	 */
-	private int getNextLocation(int startPos, int stepNum, String key) {
+	private int getNextLocation(int startPos, String key, int stepNum) {
 		int step = startPos;
 		switch (probeType) {
 		case LINEAR_PROBE:
@@ -195,12 +194,7 @@ public class Hashtable<V> {
 	 * @return
 	 */
 	private int doubleHash(String key) {
-		BigInteger hashVal = BigInteger.valueOf(key.charAt(0) - 96);
-		for (int i = 0; i < key.length(); i++) {
-			BigInteger c = BigInteger.valueOf(key.charAt(i) - 96);
-			hashVal = hashVal.multiply(BigInteger.valueOf(27)).add(c);
-		}
-		return DBL_HASH_K.subtract(hashVal.mod(DBL_HASH_K)).intValue();
+		return (hash(key) % DOUBLE_HASH_MAX) + 1;
 	}
 
 	/**
@@ -257,8 +251,7 @@ public class Hashtable<V> {
 	 * of the old array.
 	 */
 	private void resize() {
-	    System.out.println("RESIZE");
-		max = nextPrime(max*2);
+		max = nextPrime(max*4);
 		Object[] temp = arr;
 		arr = new Object[max];
 		itemCount = 0;
@@ -269,7 +262,6 @@ public class Hashtable<V> {
 		        put(p.key, p.value);
             }
         }
-        System.out.println("RESIZE itemCount "+itemCount);
 	}
 
 	
