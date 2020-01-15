@@ -46,7 +46,8 @@ public class Hashtable<V> {
 	}
 
 	/**
-	 * Store the value against the given key. If the loadFactor exceeds maxLoad, call the resize 
+	 * Store the value against the given key. If the key is null or an empty string, throw an
+	 * IllegallArgumentException. If the loadFactor exceeds maxLoad, call the resize
 	 * method to resize the array. the If key already exists then its value should be overwritten.
 	 * Create a new Pair item containing the key and value, then use the findEmpty method to find an unoccupied 
 	 * position in the array to store the pair. Call findEmmpty with the hashed value of the key as the starting
@@ -56,6 +57,9 @@ public class Hashtable<V> {
 	 * @param value
 	 */
 	public void put(String key, V value) {
+		if(key == null || key.length() == 0) {
+			throw new IllegalArgumentException("Key must be a non-empty String");
+		}
         itemCount++;
 	    Pair p = new Pair(key, value);
 	    if(getLoadFactor()>maxLoad) {
