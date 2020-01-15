@@ -33,14 +33,17 @@ public class TestHT {
 
 	@Test
 	public void testDuplicates() {
-		Hashtable<String> h = new Hashtable<>(10);
+		Hashtable<String> h = new Hashtable<>(100);
+		for(int i=0;i<50;i++) {
+		    h.put(i+"", i+"");
+        }
 		h.put("a", "a");
 		h.put("b", "b");
 		h.put("a", "c");
 		h.put("b", "d");
 		assertEquals(h.get("a"), "c");
 		assertEquals(h.get("b"), "d");
-		assertEquals(h.getKeys().size(), 2);
+		assertEquals(h.getKeys().size(), 52);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
