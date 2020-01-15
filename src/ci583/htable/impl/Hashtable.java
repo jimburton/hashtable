@@ -9,7 +9,6 @@ package ci583.htable.impl;
  * location when necessary.
  */
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -22,12 +21,10 @@ public class Hashtable<V> {
 	private int itemCount; //the number of items stored in arr
 	private final double maxLoad = 0.6; //the maximum load factor
 
-	public static enum PROBE_TYPE {
-		LINEAR_PROBE, QUADRATIC_PROBE, DOUBLE_HASH;
+	public enum PROBE_TYPE {
+		LINEAR_PROBE, QUADRATIC_PROBE, DOUBLE_HASH
 	}
-
-	PROBE_TYPE probeType; //the type of probe to use when dealing with collisions
-	private final BigInteger DBL_HASH_K = BigInteger.valueOf(8);
+	private PROBE_TYPE probeType; //the type of probe to use when dealing with collisions
 
 	/**
 	 * Create a new Hashtable with a given initial capacity and using a given probe type
@@ -275,7 +272,7 @@ public class Hashtable<V> {
 		private String key;
 		private V value;
 
-		public Pair(String key, V value) {
+		Pair(String key, V value) {
 			this.key = key;
 			this.value = value;
 		}
