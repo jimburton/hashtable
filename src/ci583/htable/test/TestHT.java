@@ -24,9 +24,10 @@ public class TestHT {
 	}
 	
 	@Test
-	public void testNotFound() {
+	public void testFoundNotFound() {
 		Hashtable<Boolean> h = new Hashtable<Boolean>(100);
 		h.put("yes", true);
+		assertTrue(h.get("yes"));
 		assertNull(h.get("no"));
 	}
 	
@@ -49,11 +50,14 @@ public class TestHT {
 	@Test
 	public void testGet() {
 		Hashtable<String> h = new Hashtable<String>(9);
+		int c =0;
 		for(int i=0;i<10;i++) {
 			for(int j=10;j>0;j--) {
 				h.put(i+":"+j, j+":"+i);
+				c++;
 			}
 		}
+		System.out.println("c: "+c);
 		
 		for(int i=0;i<10;i++) {
 			for(int j=10;j>0;j--) {

@@ -10,7 +10,9 @@ package ci583.htable.impl;
  */
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class Hashtable<V> {
 
@@ -32,7 +34,9 @@ public class Hashtable<V> {
 	 * @param pt
 	 */
 	public Hashtable(int initialCapacity, PROBE_TYPE pt) {
-		//...add code
+		probeType = pt;
+		max = nextPrime(initialCapacity);
+		arr = new Object[max];
 	}
 	
 	/**
@@ -40,7 +44,7 @@ public class Hashtable<V> {
 	 * @param initialCapacity
 	 */
 	public Hashtable(int initialCapacity) {
-		//...add code
+		this(initialCapacity, PROBE_TYPE.LINEAR_PROBE);
 	}
 
 	/**
@@ -54,7 +58,13 @@ public class Hashtable<V> {
 	 * @param value
 	 */
 	public void put(String key, V value) {
-		throw new UnsupportedOperationException("Method not implemented");
+        itemCount++;
+	    Pair p = new Pair(key, value);
+	    if(getLoadFactor()>maxLoad) {
+	        resize();
+        }
+        arr[findEmpty(hash(key), 0, key)] = p;
+	    System.out.println("itemCount: "+itemCount);
 	}
 
 	/**
@@ -64,7 +74,7 @@ public class Hashtable<V> {
 	 * @return
 	 */
 	public V get(String key) {
-		throw new UnsupportedOperationException("Method not implemented");
+	    return find(hash(key), key, 0);
 	}
 
 	/**
@@ -73,7 +83,8 @@ public class Hashtable<V> {
 	 * @return
 	 */
 	public boolean hasKey(String key) {
-		throw new UnsupportedOperationException("Method not implemented");
+
+	    return get(key) != null;
 	}
 
 	/**
@@ -81,7 +92,14 @@ public class Hashtable<V> {
 	 * @return
 	 */
 	public Collection<String> getKeys() {
-		throw new UnsupportedOperationException("Method not implemented");
+
+	    List<String> result = new ArrayList<>();
+	    for(Object o : arr) {
+	        if(o != null) {
+	            result.add(((Pair)o).key);
+            }
+        }
+        return result;
 	}
 
 	/**
@@ -89,7 +107,7 @@ public class Hashtable<V> {
 	 * @return
 	 */
 	public double getLoadFactor() {
-		throw new UnsupportedOperationException("Method not implemented");
+		return itemCount / (double) max;
 	}
 
 	/**
@@ -97,7 +115,7 @@ public class Hashtable<V> {
 	 * @return
 	 */
 	public int getCapacity() {
-		throw new UnsupportedOperationException("Method not implemented");
+		return max;
 	}
 	
 	/**
@@ -114,7 +132,13 @@ public class Hashtable<V> {
 	 * @return
 	 */
 	private V find(int startPos, String key, int stepNum) {
-		throw new UnsupportedOperationException("Method not implemented");
+		if(arr[startPos] == null) {
+		    return null;
+        } else if (((Pair) arr[startPos]).key.equals(key)) {
+		    return ((Pair) arr[startPos]).value;
+        } else {
+		    return find(getNextLocation(startPos, stepNum+1, key), key, stepNum+1);
+        }
 	}
 
 	/**
@@ -128,7 +152,12 @@ public class Hashtable<V> {
 	 * @return
 	 */
 	private int findEmpty(int startPos, int stepNum, String key) {
-		throw new UnsupportedOperationException("Method not implemented");
+	    System.out.println("Storing "+key);
+        if(arr[startPos] == null || ((Pair) arr[startPos]).key.equals(key)) {
+            return startPos;
+        } else {
+            return findEmpty(getNextLocation(startPos, stepNum+1, key), stepNum+1 , key);
+        }
 	}
 
 	/**
@@ -136,7 +165,7 @@ public class Hashtable<V> {
 	 * probe is being used, we just increment startPos. If the double hash probe type is being used, 
 	 * add the double hashed value of the key to startPos. If the quadratic probe is being used, add
 	 * the square of the step number to startPos.
-	 * @param i
+	 * @param startPos
 	 * @param stepNum
 	 * @param key
 	 * @return
@@ -182,7 +211,11 @@ public class Hashtable<V> {
 	 * @return
 	 */
 	private int hash(String key) {
-		throw new UnsupportedOperationException("Method not implemented");
+        Long hash = 0L;
+        for (int i = 0; i < key.length(); i++) {
+            hash = key.charAt(i) + (hash << 6) + (hash << 16) - hash;
+        }
+        return Math.abs(hash.intValue() % max);
 	}
 
 	/**
@@ -191,7 +224,18 @@ public class Hashtable<V> {
 	 * @return
 	 */
 	private boolean isPrime(int n) {
-		throw new UnsupportedOperationException("Method not implemented");
+        if (n <= 3) {
+            return n > 1;
+        }
+        if (n % 2 == 0 || n % 3 == 0) {
+            return false;
+        }
+        for (int i = 5; i * i <= n; i += 6) {
+            if (n % i == 0 || n % (i + 2) == 0) {
+                return false;
+            }
+        }
+        return true;
 	}
 
 	/**
@@ -200,7 +244,11 @@ public class Hashtable<V> {
 	 * @return
 	 */
 	private int nextPrime(int n) {
-		throw new UnsupportedOperationException("Method not implemented");
+		if(isPrime(n)) {
+		    return n;
+        } else {
+		    return nextPrime(n+1);
+        }
 	}
 
 	/**
@@ -209,7 +257,19 @@ public class Hashtable<V> {
 	 * of the old array.
 	 */
 	private void resize() {
-		throw new UnsupportedOperationException("Method not implemented");
+	    System.out.println("RESIZE");
+		max = nextPrime(max*2);
+		Object[] temp = arr;
+		arr = new Object[max];
+		itemCount = 0;
+		Pair p;
+		for(Object o: temp) {
+		    if(o != null) {
+		        p = (Pair) o;
+		        put(p.key, p.value);
+            }
+        }
+        System.out.println("RESIZE itemCount "+itemCount);
 	}
 
 	
