@@ -1,4 +1,4 @@
-package ci583.htable.test;
+package ci583.htable;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -8,8 +8,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
-import ci583.htable.impl.Hashtable;
-import ci583.htable.impl.Hashtable.PROBE_TYPE;
+import ci583.htable.Hashtable.PROBE_TYPE;
 
 public class TestHT {
 
