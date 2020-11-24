@@ -141,7 +141,21 @@ public class Hashtable<V> {
      * @return
      */
     private int getNextLocation(int startPos, String key, int stepNum) {
-        throw new UnsupportedOperationException("Method not implemented");
+        int step = startPos;
+        switch (probeType) {
+            case LINEAR_PROBE:
+                step++;
+                break;
+            case DOUBLE_HASH:
+                step += doubleHash(key);
+                break;
+            case QUADRATIC_PROBE:
+                step += stepNum * stepNum;
+                break;
+            default:
+                break;
+        }
+        return step % max;
     }
 
     /**
