@@ -1,4 +1,4 @@
-package ci583.htable.impl;
+package ci583.htable;
 
 /**
  * A HashTable with no deletions allowed. Duplicates overwrite the existing value. Values are of
