@@ -1,15 +1,13 @@
-package ci583.htable.test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+package ci583.htable;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import ci583.htable.impl.Hashtable;
-import ci583.htable.impl.Hashtable.PROBE_TYPE;
+import ci583.htable.Hashtable.PROBE_TYPE;
+
+import java.util.Optional;
+
+import static org.junit.Assert.*;
 
 public class TestHT {
 
@@ -20,15 +18,17 @@ public class TestHT {
 	@Test
 	public void testEmpty() {
 		Hashtable<Boolean> h = new Hashtable<>(10);
-		assertNull(h.get("foo"));
+		assertFalse(h.get("foo").isPresent());
 	}
 	
 	@Test
 	public void testFoundNotFound() {
 		Hashtable<Boolean> h = new Hashtable<>(10);
 		h.put("yes", true);
-		assertTrue(h.get("yes"));
-		assertNull(h.get("no"));
+		Optional<Boolean> o1 = h.get("yes");
+		assertTrue(o1.isPresent() && o1.get());
+		Optional<Boolean> o2 = h.get("no");
+		assertFalse(o2.isPresent());
 	}
 
 	@Test
@@ -41,8 +41,8 @@ public class TestHT {
 		h.put("b", "b");
 		h.put("a", "c");
 		h.put("b", "d");
-		assertEquals(h.get("a"), "c");
-		assertEquals(h.get("b"), "d");
+		assertEquals(h.get("a").get(), "c");
+		assertEquals(h.get("b").get(), "d");
 		assertEquals(h.getKeys().size(), 52);
 	}
 
@@ -80,7 +80,7 @@ public class TestHT {
 		}
 		for(int i=0;i<10;i++) {
 			for(int j=10;j>0;j--) {
-				assertEquals(h.get(i+":"+j), j+":"+i);
+				assertEquals(h.get(i+":"+j).get(), j+":"+i);
 			}
 		}
 	}
@@ -89,7 +89,7 @@ public class TestHT {
 	public void testNull() {
 		Hashtable<Integer> h = new Hashtable<>(20);
 		for(int i=0;i<10;i++) h.put(Integer.valueOf(i).toString(), Integer.valueOf(i));
-		assertNull(h.get(11+""));
+		assertFalse(h.get(11+"").isPresent());
 	}
 
 	@Test
@@ -97,7 +97,7 @@ public class TestHT {
 		Hashtable<Integer> h = new Hashtable<>(20, Hashtable.PROBE_TYPE.LINEAR_PROBE);
 		assertEquals(h.getCapacity(), 23);//23 is smallest prime > 20
 		for(int i=0;i<20;i++) h.put(Integer.valueOf(i).toString(), Integer.valueOf(i));
-		assertFalse(h.getCapacity() == 23);//should have resized
+		assertNotEquals(23, h.getCapacity());//should have resized
 		assertFalse(h.getLoadFactor() > 0.6);
 	}
 	
@@ -111,5 +111,4 @@ public class TestHT {
 			assertTrue(k.equals("bananas") || k.equals("pyjamas") || k.equals("kedgeree"));
 		}
 	}
-
 }
