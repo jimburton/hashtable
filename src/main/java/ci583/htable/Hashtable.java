@@ -1,5 +1,6 @@
 package ci583.htable;
 
+import java.util.Collection;
 /**
  * A HashTable with no deletions allowed. Duplicates overwrite the existing value. Values are of
  * type V and keys are strings -- one extension is to adapt this class to use other types as keys.
@@ -8,49 +9,47 @@ package ci583.htable;
  * (key, value). This is so that we can detect collisions in the hash function and look for the next
  * location when necessary.
  */
-
-import java.util.Collection;
-import java.util.List;
-
 public class Hashtable<V> {
 
-    private static final int DOUBLE_HASH_MAX = 8; //used in the doubleHash method
-    private Object[] arr; //an array of Pair objects, where each pair contains the key and value stored in the hashtable
-    private int max; //the size of arr. This should be a prime number
-    private int itemCount; //the number of items stored in arr
-    private final double maxLoad = 0.6; //the maximum load factor
+    private static final int DOUBLE_HASH_MAX = 8; // used in the doubleHash method
+    private Object[] arr; // an array of Pair objects, where each pair contains the key and value stored in the hashtable
+    private int max; // the size of arr. This should be a prime number
+    private int itemCount; // the number of items stored in arr
+    private final double maxLoad = 0.6; // the maximum load factor
 
     public enum PROBE_TYPE {
         LINEAR_PROBE, QUADRATIC_PROBE, DOUBLE_HASH
     }
-    private PROBE_TYPE probeType; //the type of probe to use when dealing with collisions
+    private PROBE_TYPE probeType; // the type of probe to use when dealing with collisions
+    private PROBE_TYPE defaultProbeType = PROBE_TYPE.LINEAR_PROBE; // the default probe type
 
     /**
-     * Create a new Hashtable with a given initial capacity and using a given probe type
-     * @param initialCapacity
-     * @param pt
+     * Create a new Hashtable with a given initial capacity and using a given probe type.
+     * @param initialCapacity   The requested size of the hashtable
+     * @param pt                The requested probe type
      */
     public Hashtable(int initialCapacity, PROBE_TYPE pt) {
         throw new UnsupportedOperationException("Method not implemented");
     }
 
     /**
-     * Create a new Hashtable with a given initial capacity and using the default probe type
-     * @param initialCapacity
+     * Create a new Hashtable with a given initial capacity and using the default probe type.
+     * @param initialCapacity   The requested size of the hashtable
      */
     public Hashtable(int initialCapacity) {
         throw new UnsupportedOperationException("Method not implemented");
     }
 
     /**
-     * Store the value against the given key. If the loadFactor exceeds maxLoad, call the resize
+     * Store the value against the given key. If the key is null throw an IllegalArgumentException.
+     * If the loadFactor exceeds maxLoad, call the resize
      * method to resize the array. the If key already exists then its value should be overwritten.
      * Create a new Pair item containing the key and value, then use the findEmpty method to find an unoccupied
-     * position in the array to store the pair. Call findEmmpty with the hashed value of the key as the starting
-     * position for the search, stepNum of zero and the original key.
+     * position in the array to store the pair. Call findEmptyOrSameKey with the hashed value of the key as the
+     * starting position for the search, stepNum of one and the original key.
      * containing
-     * @param key
-     * @param value
+     * @param key       The key to store against
+     * @param value     The value to store
      */
     public void put(String key, V value) {
         throw new UnsupportedOperationException("Method not implemented");
@@ -59,15 +58,15 @@ public class Hashtable<V> {
     /**
      * Get the value associated with key, or return null if key does not exists. Use the find method to search the
      * array, starting at the hashed value of the key, stepNum of zero and the original key.
-     * @param key
-     * @return
+     * @param key   The key to look up.
+     * @return      The value associated with the key, or null if the key does not exist.
      */
     public V get(String key) {
         throw new UnsupportedOperationException("Method not implemented");
     }
 
     /**
-     * Return true if the Hashtable contains this key, false otherwise
+     * Return true if the Hashtable contains this key, false otherwise.
      * @param key
      * @return
      */
@@ -76,7 +75,7 @@ public class Hashtable<V> {
     }
 
     /**
-     * Return all the keys in this Hashtable as a collection
+     * Return all the keys in this Hashtable as a collection.
      * @return
      */
     public Collection<String> getKeys() {
@@ -84,7 +83,7 @@ public class Hashtable<V> {
     }
 
     /**
-     * Return the load factor, which is the ratio of itemCount to max
+     * Return the load factor, which is the ratio of itemCount to max.
      * @return
      */
     public double getLoadFactor() {
@@ -92,7 +91,7 @@ public class Hashtable<V> {
     }
 
     /**
-     * return the maximum capacity of the Hashtable
+     * return the maximum capacity of the Hashtable.
      * @return
      */
     public int getCapacity() {
@@ -117,16 +116,17 @@ public class Hashtable<V> {
     }
 
     /**
-     * Find the first unoccupied location where a value associated with key can be stored, starting the
-     * search at position startPos. If startPos is unoccupied, return startPos. Otherwise use the getNextLocation
-     * method with an incremented value of stepNum to find the appropriate next position to check
+     * Find the first location where a value associated with key can be stored, starting the
+     * search at position startPos. The location will either be unoccupied or contain a Pair object with the
+     * same key as the one we want to store. If startPos is unoccupied, return startPos. Otherwise use the
+     * getNextLocation method with an incremented value of stepNum to find the appropriate next position to check
      * (which will differ depending on the probe type being used) and use this in a recursive call to findEmpty.
      * @param startPos
      * @param key
      * @param stepNum
      * @return
      */
-    private int findEmpty(int startPos, String key, int stepNum) {
+    private int findEmptyOrSameKey(int startPos, String key, int stepNum) {
         throw new UnsupportedOperationException("Method not implemented");
     }
 
@@ -160,7 +160,7 @@ public class Hashtable<V> {
 
     /**
      * A secondary hash function which returns a small value (less than or equal to DBL_HASH_MAX)
-     * to probe the next location if the double hash probe type is being used
+     * to probe the next location if the double hash probe type is being used.
      * @param key
      * @return
      */
@@ -171,7 +171,7 @@ public class Hashtable<V> {
     /**
      * Return an int value calculated by hashing the key. See the lecture slides for information
      * on creating hash functions. The return value should be less than max, the maximum capacity
-     * of the array
+     * of the array.
      * @param key
      * @return
      */
@@ -180,7 +180,7 @@ public class Hashtable<V> {
     }
 
     /**
-     * Return true if n is prime
+     * Return true if n is prime.
      * @param n
      * @return
      */
@@ -189,7 +189,7 @@ public class Hashtable<V> {
     }
 
     /**
-     * Get the smallest prime number which is larger than n
+     * Get the smallest prime number which is larger than or equal to n.
      * @param n
      * @return
      */
