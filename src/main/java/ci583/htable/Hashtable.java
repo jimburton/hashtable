@@ -86,7 +86,6 @@ public class Hashtable<V> {
 	 * @return		True if the hashtable contains the key.
 	 */
 	public boolean hasKey(String key) {
-
 	    return get(key).isPresent();
 	}
 
