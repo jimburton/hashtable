@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -21,11 +22,35 @@
     </build>
     <dependencies>
         <dependency>
+=======
+<project>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>uk.ac.brighton.ci583</groupId>
+    <artifactId>hashtable</artifactId>
+    <version>1</version>
+
+    <properties>
+        <maven.compiler.source>1.11</maven.compiler.source>
+        <maven.compiler.target>1.11</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.8.1</version>
+        </dependency>
+        <dependency>
+>>>>>>> solution
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.11</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
+<<<<<<< HEAD
 
+=======
+>>>>>>> solution
 </project>
