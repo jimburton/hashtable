@@ -42,7 +42,7 @@ function in my slides from the week we covered hashtables. If you use that one b
 27 to something more appropriate (and to understand why they are there in the first place and so why they should 
 changed). You can make your data structure much more efficient and faster by doing some research to find a more 
 efficient hash function online (and possibly translating it into Java -- many of the most
-efficient hash functions are written inlanguages such as C).
+efficient hash functions are written in languages such as C).
 
 # The `findEmptyorSameKey` method
 
