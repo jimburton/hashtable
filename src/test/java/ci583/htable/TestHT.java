@@ -102,8 +102,8 @@ public class TestHT {
 			}
 		}
 		
-		for(int i=0;i<2000;i++) {
-			for(int j=2000;j>0;j--) {
+		for(int i=0;i<1000;i++) {
+			for(int j=1000;j>0;j--) {
 				assertTrue(h.hasKey(i+":"+j));
 			}
 		}
