@@ -67,7 +67,7 @@ This method requires the following steps:
 In this method you simply return the result of calling `find`, passing in the hashed key, the key itself and a 
 `stepNum` of one. Because the object may not exist, return an `Optional`. That is, if the key is found return
 the value associated it wrapped up in an Optional using the Optional.of method, e.g. Optional.of(pair.value). If the key is not
-found return Optional.empty(). You can read more about Java's Òptional` type [here](https://www.baeldung.com/java-optional).
+found return Optional.empty(). You can read more about Java's `Optional` type [here](https://www.baeldung.com/java-optional).
 
 # The `find` method
 
