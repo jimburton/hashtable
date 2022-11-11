@@ -59,8 +59,11 @@ public class Hashtable<V> {
 	}
 
 	/**
-	 * Get the value associated with key, or return null if key does not exists. Use the find method to search the
-	 * array, starting at the hashed value of the key, stepNum of zero and the original key.
+	 * Get the value associated with key, or return an empty Optional if the key does not exist. Use the find method to search the
+	 * array, starting at the hashed value of the key, stepNum of zero and the original key. If the key is found return
+	 * the value associated it wrapped up in an Optional using the Optional.of method, e.g. Optional.of(pair.value). If the key is not
+	 * found return Optional.empty(). 
+	 *
 	 * @param key	The key of the object we are looking for.
 	 * @return		An Optional containing the value we are asked to find, which is empty if the key was not present.
 	 */
